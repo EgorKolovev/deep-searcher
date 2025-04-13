@@ -6,12 +6,12 @@ from deepsearcher.utils import log
 from deepsearcher.vector_db.base import BaseVectorDB
 
 COLLECTION_ROUTE_PROMPT = """
-I provide you with collection_name(s) and corresponding collection_description(s). Please select the collection names that may be related to the question and return a python list of str. If there is no collection related to the question, you can return an empty list.
+Я предоставляю вам collection_name(s) и соответствующие collection_description(s). Выберите названия коллекций, которые могут быть связаны с вопросом, и верните список python str. Если нет коллекции, связанной с вопросом, вы можете вернуть пустой список.
 
 "QUESTION": {question}
 "COLLECTION_INFO": {collection_info}
 
-When you return, you can ONLY return a python list of str, WITHOUT any other additional content. Your selected collection name list is:
+Когда ты возвращаешь значение, ты можешь вернуть ТОЛЬКО список python str, БЕЗ какого-либо другого дополнительного контента. Ваш выбранный список названий коллекций:
 """
 
 

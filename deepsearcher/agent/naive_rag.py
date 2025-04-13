@@ -7,11 +7,11 @@ from deepsearcher.llm.base import BaseLLM
 from deepsearcher.utils import log
 from deepsearcher.vector_db.base import BaseVectorDB, RetrievalResult, deduplicate_results
 
-SUMMARY_PROMPT = """You are a AI content analysis expert, good at summarizing content. Please summarize a specific and detailed answer or report based on the previous queries and the retrieved document chunks.
+SUMMARY_PROMPT = """Вы эксперт по анализу контента с использованием искусственного интеллекта, хорошо умеете резюмировать контент. Пожалуйста, резюмируйте конкретный и подробный ответ или отчет на основе предыдущих запросов и извлеченных фрагментов документа.
 
-Original Query: {query}
+Исходный запрос: {query}
 
-Related Chunks: 
+Связанные фрагменты:
 {mini_chunk_str}
 """
 

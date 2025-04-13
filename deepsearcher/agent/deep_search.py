@@ -9,57 +9,56 @@ from deepsearcher.utils import log
 from deepsearcher.vector_db import RetrievalResult
 from deepsearcher.vector_db.base import BaseVectorDB, deduplicate_results
 
-SUB_QUERY_PROMPT = """To answer this question more comprehensively, please break down the original question into up to four sub-questions. Return as list of str.
-If this is a very simple question and no decomposition is necessary, then keep the only one original question in the python code list.
+SUB_QUERY_PROMPT = """Чтобы ответить на этот вопрос более подробно, разбейте исходный вопрос на четыре подвопроса. Верните в виде списка str.
+Если это очень простой вопрос и разложение не требуется, то оставьте единственный исходный вопрос в виде списка Python.
 
-Original Question: {original_query}
-
+Исходный вопрос: {original_query}
 
 <EXAMPLE>
-Example input:
-"Explain deep learning"
+Пример ввода:
+"Объясните глубокое обучение"
 
-Example output:
+Пример вывода:
 [
-    "What is deep learning?",
-    "What is the difference between deep learning and machine learning?",
-    "What is the history of deep learning?"
+"Что такое глубокое обучение?",
+"В чем разница между глубоким обучением и машинным обучением?",
+"Какова история глубокого обучения?"
 ]
 </EXAMPLE>
 
-Provide your response in a python code list of str format:
+Предоставьте свой ответ в виде списка Python в формате str:
 """
 
-RERANK_PROMPT = """Based on the query questions and the retrieved chunk, to determine whether the chunk is helpful in answering any of the query question, you can only return "YES" or "NO", without any other information.
+RERANK_PROMPT = """На основе вопросов запроса и извлеченного фрагмента, чтобы определить, полезен ли фрагмент для ответа на любой из вопросов запроса, вы можете вернуть только "YES" или "NO" без какой-либо другой информации.
 
-Query Questions: {query}
-Retrieved Chunk: {retrieved_chunk}
+Вопросы запроса: {query}
+Извлеченный фрагмент: {retrieved_chunk}
 
-Is the chunk helpful in answering the any of the questions?
+Помог ли фрагмент для ответа на любой из вопросов?
 """
 
 
-REFLECT_PROMPT = """Determine whether additional search queries are needed based on the original query, previous sub queries, and all retrieved document chunks. If further research is required, provide a Python list of up to 3 search queries. If no further research is required, return an empty list.
+REFLECT_PROMPT = """Определите, нужны ли дополнительные поисковые запросы, на основе исходного запроса, предыдущих подзапросов и всех извлеченных фрагментов документа. Если требуется дополнительное исследование, предоставьте список Python из 3 поисковых запросов. Если дополнительное исследование не требуется, верните пустой список.
 
-If the original query is to write a report, then you prefer to generate some further queries, instead return an empty list.
+Если исходный запрос заключается в написании отчета, то вы предпочитаете сгенерировать несколько дополнительных запросов, а не возвращать пустой список.
 
-Original Query: {question}
+Исходный запрос: {question}
 
-Previous Sub Queries: {mini_questions}
+Предыдущие подзапросы: {mini_questions}
 
-Related Chunks: 
+Связанные фрагменты:
 {mini_chunk_str}
 
-Respond exclusively in valid List of str format without any other text."""
+Отвечайте исключительно в допустимом формате списка str(list of str) без какого-либо другого текста."""
 
 
-SUMMARY_PROMPT = """You are a AI content analysis expert, good at summarizing content. Please summarize a specific and detailed answer or report based on the previous queries and the retrieved document chunks.
+SUMMARY_PROMPT = """Вы эксперт по анализу контента с использованием искусственного интеллекта, хорошо умеете резюмировать контент. Пожалуйста, резюмируйте конкретный и подробный ответ или отчет на основе предыдущих запросов и извлеченных фрагментов документа.
 
-Original Query: {question}
+Исходный запрос: {question}
 
-Previous Sub Queries: {mini_questions}
+Предыдущие подзапросы: {mini_questions}
 
-Related Chunks: 
+Связанные фрагменты:
 {mini_chunk_str}
 
 """

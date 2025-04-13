@@ -5,16 +5,16 @@ from deepsearcher.llm.base import BaseLLM
 from deepsearcher.utils import log
 from deepsearcher.vector_db import RetrievalResult
 
-RAG_ROUTER_PROMPT = """Given a list of agent indexes and corresponding descriptions, each agent has a specific function. 
-Given a query, select only one agent that best matches the agent handling the query, and return the index without any other information.
+RAG_ROUTER_PROMPT = """Учитывая список индексов агентов и соответствующие описания, каждый агент имеет определенную функцию.
+Учитывая запрос, выберите только одного агента, который лучше всего соответствует агенту, обрабатывающему запрос, и верните индекс без какой-либо другой информации.
 
-## Question
+## Вопрос
 {query}
 
-## Agent Indexes and Descriptions
+## Индексы и описания агентов
 {description_str}
 
-Only return one agent index number that best matches the agent handling the query:
+Возвращайте только один номер индекса агента, который лучше всего соответствует агенту, обрабатывающему запрос:
 """
 
 
